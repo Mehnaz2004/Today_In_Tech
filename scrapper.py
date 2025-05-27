@@ -59,6 +59,8 @@ def scrape_techcrunch():
         # Extract title and URL
         title_tag = card.find('a', class_='loop-card__title-link')
         time_tag = card.find('time')
+        author_tag = card.select_one('a.loop-card__author')
+        author = author_tag.get_text(strip=True) if author_tag else "Tech Crunch"
 
         if not title_tag:
             continue  # skip if title is missing
@@ -71,20 +73,99 @@ def scrape_techcrunch():
             raw_date = time_tag['datetime']
             try:
                 dt_object = datetime.fromisoformat(raw_date)
-                formatted_date = dt_object.strftime("%B %d, %Y")
+                formatted_date = dt_object.strftime("%Y-%m-%d %H:%M:%S")
             except Exception:
-                formatted_date = datetime.now().strftime("%B %d, %Y")
+                formatted_date = dt_object.strftime("%Y-%m-%d %H:%M:%S")
         else:
-            formatted_date = datetime.now().strftime("%B %d, %Y")
+            formatted_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         articles.append({
             "title": title,
             "url": url,
             "published_at": formatted_date,
+            "author": author,
             "source": "TechCrunch"
         })
 
     return articles
 
-articles = scrape_techcrunch()
+def scrape_theverge():
+    page=requests.get("https://www.theverge.com/tech")
+    soup = BeautifulSoup(page.text, 'html.parser')
+    
+    for card in soup.select('div._1pm20r51'):
+        # Extract title and URL
+        title_tag = card.find('a', class_='_1lkmsmo1')
+        time_tag = card.find('time')
+        author_tag = card.select_one('span._1lldluw2._1xwtict5')
+        author = author_tag.get_text(strip=True) if author_tag else "The Verge"
+
+        if not title_tag:
+            continue  # skip if title is missing
+
+        title = title_tag.get_text(strip=True)
+        url = title_tag.get('href')
+
+        # Format date
+        if time_tag and time_tag.has_attr('datetime'):
+            raw_date = time_tag['datetime']
+            try:
+                dt_object = datetime.fromisoformat(raw_date)
+                formatted_date = dt_object.strftime("%Y-%m-%d %H:%M:%S")
+            except Exception:
+                formatted_date = dt_object.strftime("%Y-%m-%d %H:%M:%S")
+        else:
+            formatted_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        articles.append({
+            "title": title,
+            "url": url,
+            "published_at": formatted_date,
+            "author": author,
+            "source": "The Verge"
+        })
+
+    return articles
+
+def scrape_venturebeat():
+    page = requests.get("https://venturebeat.com/category/ai/", headers=header)
+    soup = BeautifulSoup(page.text, 'html.parser')
+
+    for card in soup.select('header.ArticleListing__body '):
+        title_tag = card.find('h2', class_='ArticleListing__title')
+        time_tag = card.find('time')
+        author_tag = card.find('a', class_='ArticleListing__author')
+
+        if not title_tag or not title_tag.a:
+            continue
+
+        title = title_tag.get_text(strip=True)
+        url = title_tag.a.get('href')
+        author = author_tag.get_text(strip=True) if author_tag else "Venture Beat"
+
+        # Format date
+        if time_tag and time_tag.has_attr('datetime'):
+            raw_date = time_tag['datetime']
+            try:
+                dt_object = datetime.fromisoformat(raw_date)
+                formatted_date = dt_object.strftime("%Y-%m-%d %H:%M:%S")
+            except Exception:
+                formatted_date = dt_object.strftime("%Y-%m-%d %H:%M:%S")
+        else:
+            formatted_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        articles.append({
+            "title": title,
+            "url": url,
+            "published_at": formatted_date,
+            "author": author,
+            "source": "VentureBeat"
+        })
+
+    return articles
+
+
+scrape_techcrunch()
+scrape_theverge()
+scrape_venturebeat()
 save_to_mongodb(articles)
