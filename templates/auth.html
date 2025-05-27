@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | Today in Tech</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0a0a0a;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .auth-container {
+      background-color: #1e1e1e;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+      max-width: 400px;
+      width: 100%;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 5px;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #00bcd4;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #00acc1;
+    }
+    .google-btn {
+      background-color: #db4437;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <h2>Login to Today in Tech</h2>
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
+    <button onclick="login()">Login</button>
+    <button onclick="signup()">Sign Up</button>
+    <button class="google-btn" onclick="googleLogin()">Sign in with Google</button>
+  </div>
+
+  <script type="module">
+    // Firebase imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      GoogleAuthProvider,
+      signInWithPopup,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyD41-VckzDCse3K3M659iAyk5kMcOUnSN8",
+      authDomain: "todayintech-f238a.firebaseapp.com",
+      projectId: "todayintech-f238a",
+      storageBucket: "todayintech-f238a.appspot.com",
+      messagingSenderId: "484902409160",
+      appId: "1:484902409160:web:16d8b86d681aa11baf66fd",
+      measurementId: "G-C01K6XGZDJ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+
+    // Email/password login
+    window.login = function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          alert("✅ Login successful!");
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+          alert("❌ Login failed: " + error.message);
+        });
+    };
+
+    // Sign up
+    window.signup = function () {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          alert("✅ Account created!");
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+          alert("❌ Signup failed: " + error.message);
+        });
+    };
+
+    // Google sign-in
+    window.googleLogin = function () {
+      const provider = new GoogleAuthProvider();
+
+      signInWithPopup(auth, provider)
+        .then((result) => {
+          const user = result.user;
+          alert(`✅ Logged in as ${user.displayName}`);
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+          alert("❌ Google login failed: " + error.message);
+        });
+    };
+
+    // Optional: redirect if already logged in
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User already logged in:", user.email);
+      }
+    });
+  </script>
+</body>
+</html>
