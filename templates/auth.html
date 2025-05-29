@@ -2,81 +2,118 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login | Today in Tech</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login & Signup - Today in Tech</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #0a0a0a;
-      color: white;
+      background: #121212;
+      color: #eee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .main-container {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 10px;
+      width: 400px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    .auth-container {
-      background-color: #1e1e1e;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-      max-width: 400px;
-      width: 100%;
+      gap: 20px;
     }
     h2 {
       text-align: center;
-      margin-bottom: 1rem;
+      margin-bottom: 10px;
+      color: #61dafb;
     }
-    input {
+    .form-section {
+      background: #292929;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    input[type="email"], input[type="password"] {
       width: 100%;
-      padding: 0.75rem;
-      margin-bottom: 1rem;
+      padding: 8px;
+      margin-bottom: 10px;
       border: none;
       border-radius: 5px;
     }
     button {
       width: 100%;
-      padding: 0.75rem;
-      margin-top: 0.5rem;
+      padding: 10px;
+      background: #61dafb;
       border: none;
       border-radius: 5px;
-      background-color: #00bcd4;
-      color: white;
-      font-size: 1rem;
       cursor: pointer;
+      font-weight: bold;
+      color: #121212;
+      transition: background-color 0.3s;
     }
     button:hover {
-      background-color: #00acc1;
+      background: #21a1f1;
+    }
+    .alert {
+      color: #f44336;
+      font-size: 0.9em;
+      margin-bottom: 10px;
+      display: none;
     }
     .google-btn {
-      background-color: #db4437;
+      background: #db4437;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="auth-container">
-    <h2>Login to Today in Tech</h2>
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="Password" />
-    <button onclick="login()">Login</button>
-    <button onclick="signup()">Sign Up</button>
-    <button class="google-btn" onclick="googleLogin()">Sign in with Google</button>
+
+  <div class="main-container">
+
+    <!-- LOGIN FORM -->
+    <div class="form-section" id="login-section">
+      <h2>Login</h2>
+      <div class="alert" id="login-alert"></div>
+      <label for="login-email">Email</label>
+      <input type="email" id="login-email" placeholder="Email" required />
+      <label for="login-password">Password</label>
+      <input type="password" id="login-password" placeholder="Password" required />
+      <button id="login-btn">Login</button>
+      <button id="login-google-btn" class="google-btn">Login with Google</button>
+    </div>
+
+    <!-- SIGNUP FORM -->
+    <div class="form-section" id="signup-section">
+      <h2>Sign Up</h2>
+      <div class="alert" id="signup-alert"></div>
+      <label for="signup-email">Email</label>
+      <input type="email" id="signup-email" placeholder="Email" required />
+      <label for="signup-password">Password</label>
+      <input type="password" id="signup-password" placeholder="Password" required />
+      <button id="signup-btn">Sign Up</button>
+      <button id="signup-google-btn" class="google-btn">Sign Up with Google</button>
+    </div>
+
   </div>
 
+  <!-- Firebase and Auth Logic -->
   <script type="module">
-    // Firebase imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
     import {
       getAuth,
       signInWithEmailAndPassword,
       createUserWithEmailAndPassword,
-      GoogleAuthProvider,
       signInWithPopup,
-      onAuthStateChanged
+      GoogleAuthProvider
     } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
 
-    // Your Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyD41-VckzDCse3K3M659iAyk5kMcOUnSN8",
       authDomain: "todayintech-f238a.firebaseapp.com",
@@ -91,57 +128,85 @@
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
 
-    // Email/password login
-    window.login = function () {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+    const loginEmail = document.getElementById('login-email');
+    const loginPassword = document.getElementById('login-password');
+    const loginBtn = document.getElementById('login-btn');
+    const loginAlert = document.getElementById('login-alert');
+    const loginGoogleBtn = document.getElementById('login-google-btn');
 
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          alert("✅ Login successful!");
-          window.location.href = "dashboard.html";
-        })
-        .catch((error) => {
-          alert("❌ Login failed: " + error.message);
-        });
-    };
+    const signupEmail = document.getElementById('signup-email');
+    const signupPassword = document.getElementById('signup-password');
+    const signupBtn = document.getElementById('signup-btn');
+    const signupAlert = document.getElementById('signup-alert');
+    const signupGoogleBtn = document.getElementById('signup-google-btn');
 
-    // Sign up
-    window.signup = function () {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+    function showAlert(element, message) {
+      element.style.display = 'block';
+      element.textContent = message;
+      setTimeout(() => {
+        element.style.display = 'none';
+      }, 5000);
+    }
 
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          alert("✅ Account created!");
-          window.location.href = "dashboard.html";
-        })
-        .catch((error) => {
-          alert("❌ Signup failed: " + error.message);
-        });
-    };
-
-    // Google sign-in
-    window.googleLogin = function () {
-      const provider = new GoogleAuthProvider();
-
-      signInWithPopup(auth, provider)
-        .then((result) => {
-          const user = result.user;
-          alert(`✅ Logged in as ${user.displayName}`);
-          window.location.href = "dashboard.html";
-        })
-        .catch((error) => {
-          alert("❌ Google login failed: " + error.message);
-        });
-    };
-
-    // Optional: redirect if already logged in
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("User already logged in:", user.email);
+    async function handlePostLogin() {
+      try {
+        const user = auth.currentUser;
+        if (!user) throw new Error("No user found after login/signup.");
+        const idToken = await user.getIdToken(true);
+        localStorage.setItem('firebaseIdToken', idToken);
+        window.location.href = "/dashboard";  // ✅ Flask route
+      } catch (error) {
+        alert("Error fetching ID token: " + error.message);
       }
+    }
+
+    loginBtn.addEventListener('click', () => {
+      const email = loginEmail.value.trim();
+      const password = loginPassword.value;
+      if (!email || !password) {
+        showAlert(loginAlert, 'Please enter email and password.');
+        return;
+      }
+      signInWithEmailAndPassword(auth, email, password)
+        .then(handlePostLogin)
+        .catch((error) => {
+          if (error.code === 'auth/user-not-found') {
+            showAlert(loginAlert, 'Account not registered. Please sign up first.');
+          } else if (error.code === 'auth/wrong-password') {
+            showAlert(loginAlert, 'Incorrect password. Please try again.');
+          } else {
+            showAlert(loginAlert, error.message);
+          }
+        });
     });
+
+    signupBtn.addEventListener('click', () => {
+      const email = signupEmail.value.trim();
+      const password = signupPassword.value;
+      if (!email || !password) {
+        showAlert(signupAlert, 'Please enter email and password.');
+        return;
+      }
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(handlePostLogin)
+        .catch((error) => {
+          showAlert(signupAlert, error.message);
+        });
+    });
+
+    async function googleSignIn() {
+      const provider = new GoogleAuthProvider();
+      try {
+        await signInWithPopup(auth, provider);
+        await handlePostLogin();
+      } catch (error) {
+        alert('Google Sign-In failed: ' + error.message);
+      }
+    }
+
+    loginGoogleBtn.addEventListener('click', googleSignIn);
+    signupGoogleBtn.addEventListener('click', googleSignIn);
   </script>
+
 </body>
 </html>
