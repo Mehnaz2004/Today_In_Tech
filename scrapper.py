@@ -48,8 +48,7 @@ def save_to_mongodb(articles, user_id=None, collection_name="articles"):
             if not existing:
                 collection.insert_one(article)
                 inserted_count += 1
-            else:
-                print(f"⚠️ Duplicate found. Skipping: {article['title']}")
+                
 
         print(f"✅ Inserted {inserted_count} new article(s) to MongoDB.")
 
@@ -171,6 +170,6 @@ def scrape_all(user_id=None):
     articles = []
     articles += scrape_techcrunch()
     articles += scrape_theverge()
-    articles += scrape_venturebeat()
+    #articles += scrape_venturebeat()   reducing load for render
     save_to_mongodb(articles, user_id=user_id)
     return articles
