@@ -1,0 +1,158 @@
+body {
+  background: linear-gradient(135deg, #0f0f0f, #1f1f2e, #121212);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  position: relative;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+.navbar-brand, #userName {
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 0 0 8px rgba(0, 255, 229, 0.5);
+  color: #00ffe5 !important;
+}
+
+#lastUpdated {
+  color: #7efcff;
+  user-select: none;
+}
+
+#logoutBtn {
+  background: linear-gradient(135deg, #00ffe5, #4fc1ff);
+  border: none;
+  box-shadow: 0 0 15px rgba(79, 193, 255, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+#logoutBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(0, 255, 229, 0.6);
+}
+
+/* Table styling */
+.table {
+  font-size: 0.65rem;
+  background: rgba(18, 18, 18, 0.85);
+  box-shadow: 0 0 25px #00ffe5aa;
+  transition: box-shadow 0.3s ease;
+  font-family: 'Orbitron', sans-serif;
+}
+.table thead.table-dark {
+  background: linear-gradient(135deg, #00ffe5cc, #4fc1ffcc);
+  color: #000;
+  font-weight: 600;
+  user-select: none;
+}
+
+.table tbody tr {
+  background-color: rgba(255, 255, 255, 0.02);  /* subtle translucent base */
+  transition: background-color 0.3s ease;
+  cursor: default;
+}
+.table tbody tr:hover {
+  background-color: #004d67cc;
+  color: #fff;
+}
+
+/* Sort arrows */
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+
+#title-sort, #author-sort, #published_at-sort, #source-sort {
+  user-select: none;
+  color: #00ffe5;
+  transition: color 0.3s ease;
+}
+#title-sort:hover, #author-sort:hover, #published_at-sort:hover, #source-sort:hover {
+  color: #4fc1ff;
+}
+
+/* Scrape Now Button */
+#scrapeBtn {
+  background: linear-gradient(135deg, #00ffe5, #4fc1ff);
+  border: none;
+  color: #000;
+  box-shadow: 0 0 18px rgba(79, 193, 255, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+#scrapeBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 28px rgba(0, 255, 229, 0.8);
+}
+
+/* Loading Overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(18, 18, 18, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+  transition: opacity 0.3s ease;
+}
+
+.overlay-box {
+  background: #121212;
+  padding: 2rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 0 30px #00ffe5aa;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  color: #00ffe5;
+  user-select: none;
+}
+
+/* Spinner custom color */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  border-width: 0.3rem;
+  border-color: #4fc1ff transparent transparent transparent;
+  animation: spinner-border 0.75s linear infinite;
+}
+
+@keyframes spinner-border {
+  to { transform: rotate(360deg); }
+}
+
+.pagination {
+  --bs-pagination-color: #66d9ff; /* neon blue text */
+  --bs-pagination-bg: transparent;
+  --bs-pagination-border-color: transparent;
+}
+
+.pagination .page-link {
+  color: #66d9ff;
+  background-color: transparent;
+  border: 1px solid #0ff;
+  text-shadow: 0 0 6px #00ffff;
+  transition: all 0.3s ease;
+}
+
+.pagination .page-link:hover {
+  background-color: #00ffff;
+  color: #001f33;
+  border-color: #00ffff;
+  text-shadow: none;
+}
+
+.pagination .page-item.active .page-link {
+  background: linear-gradient(45deg, #00ffff, #0066cc);
+  border-color: #00ffff;
+  color: #001f33;
+  text-shadow: 0 0 12px #00ffff;
+  font-weight: 700;
+  box-shadow: 0 0 8px #00ffff;
+}

@@ -21,7 +21,7 @@ collection = db["articles"]
 
 @app.route('/')
 def landing():
-    return render_template('index.html')  # CTA will link to /auth
+    return render_template('index.html')  # CTA will link to /login
 
 @app.route('/login')
 def login_page():
@@ -61,9 +61,17 @@ def get_articles():
         db = client["tech_articles"]
         collection = db["articles"]
 
-        articles = list(collection.find({"user_id": user_id}, {
-            "_id": 0, "title": 1, "url": 1, "source": 1
-        }))
+        articles = list(collection.find(
+    {"user_id": user_id},
+    {
+        "_id": 0,
+        "title": 1,
+        "url": 1,
+        "source": 1,
+        "author": 1,
+        "published_at": 1
+    }
+))
 
         return jsonify(articles)
     except Exception as e:

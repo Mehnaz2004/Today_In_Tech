@@ -1,0 +1,41 @@
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Animated gradient background */
+.sci-fi-bg {
+  background: linear-gradient(135deg, #0f0f0f, #1f1f2e, #121212);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  overflow: hidden;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Neon-styled heading */
+.neon-heading {
+  font-family: 'Orbitron', sans-serif;
+  color: #00ffe5;
+  text-shadow: 0 0 10px rgba(0, 255, 229, 0.3);
+}
+
+/* Call to action button */
+.btn-cta {
+  background: linear-gradient(135deg, #00ffe5, #4fc1ff);
+  border: none;
+  color: #000;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-radius: 50px;
+  box-shadow: 0 0 15px rgba(79, 193, 255, 0.4);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(0, 255, 229, 0.6);
+}
