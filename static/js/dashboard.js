@@ -148,7 +148,7 @@ document.getElementById("dismissBtn").addEventListener("click", () => {
 
 document.getElementById("logoutBtn").addEventListener("click", async () => {
   await signOut(auth);
-  window.location.href = "/login";
+  window.location.href = "/";
 });
 
 ["title", "author", "published_at", "source"].forEach(field => {
